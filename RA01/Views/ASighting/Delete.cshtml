@@ -1,0 +1,94 @@
+﻿@model RA01.Models.AircraftSighting
+
+@{ ViewBag.Title = "DeleteAircraftSighting"; }
+
+
+<fieldset style="margin-top:20px;">
+    <legend style="color:#0026ff;font-weight:bold;">Delete Aircraft Sighting</legend>
+
+    <h3 class="text-danger">Are you sure you want to delete this?</h3><br/>
+
+    <div class="row form-group">
+        <div class="col-md-2">Make</div>
+        <div class="col-md-6"><label data-bind="text: Make"></label></div>
+    </div>
+    <div class="row form-group">
+        <div class="col-md-2">Model</div>
+        <div class="col-md-6"><label data-bind="text: Model"></label></div>
+    </div>
+    <div class="row form-group">
+        <div class="col-md-2">Registration</div>
+        <div class="col-md-6"><label data-bind="text: Registration"></label></div>
+    </div>
+    <div class="row form-group">
+        <div class="col-md-2">Location</div>
+        <div class="col-md-6"><label data-bind="text: Location"></label></div>
+    </div>
+    <div class="row form-group">
+        <div class="col-md-2">Date Time</div>
+        <div class="col-md-6"><label data-bind="text: DateAndTime"></label></div>
+    </div>
+
+
+    <div class="btn-group" role="group">
+        <button class="btn btn-danger" type="button" data-bind="click: DeleteASighting">Delete</button>
+        <a class="btn btn-default" href="@Url.Action("Index", "ASighting")">Back</a>
+    </div>
+
+
+</fieldset>
+
+
+@section Scripts {
+    <script>
+
+        $(function () {
+            ko.applyBindings(DeleteVM);
+        });
+
+        var initialData = '@Html.Raw(ViewBag.InitialData)'; //get the raw json
+        var parsedJSON = $.parseJSON(initialData); //parse the json client side
+        var DeleteVM = {
+
+            AircraftSightings: ko.observableArray([]),
+            Id: ko.observable(parsedJSON.Id),
+            Make: ko.observable(parsedJSON.Make),
+            Model: ko.observable(parsedJSON.Model),
+            Registration: ko.observable(parsedJSON.Registration),
+            Location: ko.observable(parsedJSON.Location),
+            DateAndTime: ko.observable(parsedJSON.DateAndTime),
+            DeleteASighting: function () {
+                $.ajax({
+                    url: '/ASighting/Delete',
+                    type: 'post',
+                    dataType: 'json',
+                    data: ko.toJSON(this),
+                    contentType: 'application/json',
+                    success: function (result) {
+                    },
+                    error: function (err) {
+                        if (err.responseText == "Delete Failed")
+                        { window.location.href = '/ASighting/Index/'; }
+                        else {
+                            alert("Status:" + err.responseText);
+                            window.location.href = '/ASighting/Index/';;
+                        }
+                    },
+                    complete: function () {
+                        window.location.href = '/ASighting/Index/';
+                    }
+                });
+            }
+        };
+
+        function dateFormat(d) {
+            return ((d.getMonth() + 1) + "").padStart(2, "0")
+                + "/" + (d.getDate() + "").padStart(2, "0")
+                + "/" + d.getFullYear()
+                + " " + d.getHours()
+                + ":" + d.getMinutes()
+                + ":" + d.getSeconds();
+        }
+
+    </script>
+}

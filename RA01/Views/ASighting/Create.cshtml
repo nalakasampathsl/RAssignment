@@ -1,0 +1,35 @@
+﻿
+<fieldset style="margin-top:20px;">
+    <legend style="color:#0026ff;font-weight:bold;">Create Aircraft Sighting</legend>
+
+    <div class="row form-group">
+        <div class="col-md-2">Make</div>
+        <div class="col-md-6"><input class="form-control" data-bind="value: Make"  placeholder="ex: Boeing"/></div>
+    </div>
+    <div class="row form-group">
+        <div class="col-md-2">Model</div>
+        <div class="col-md-6"> <input class="form-control" data-bind="value: Model"  placeholder="ex: 777-300ER"/></div>
+    </div>
+    <div class="row form-group">
+        <div class="col-md-2">Registration</div>
+        <div class="col-md-6"> <input class="form-control" data-bind="value: Registration"  placeholder="ex: G-RNAC"/></div>
+    </div>
+    <div class="row form-group">
+        <div class="col-md-2">Location</div>
+        <div class="col-md-6"><input class="form-control" data-bind="value: Location"  placeholder="ex: London Gatwick"/></div>
+    </div>
+    <div class="row form-group">
+        <div class="col-md-2">Date Time</div>
+        <div class="col-md-6"><input type="datetime-local" class="form-control" data-bind="value: DateAndTime"></div>
+    </div>    
+
+    <div class="btn-group" role="group">
+        <button class="btn btn-success" type="button" data-bind="click: SaveASighting">Save</button>
+        <a class="btn btn-default" href="@Url.Action("Index", "ASighting")">Back</a>
+    </div>
+
+</fieldset>
+
+@section Scripts {
+    @Scripts.Render("~/Scripts/ViewModels/CreateVM.js")
+}

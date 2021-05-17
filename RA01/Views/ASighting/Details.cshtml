@@ -1,0 +1,69 @@
+﻿@model RA01.Models.AircraftSighting
+
+@{ ViewBag.Title = "DetailsAircraftSighting"; }
+
+
+<fieldset style="margin-top:20px;">
+    <legend style="color:#0026ff;font-weight:bold;">Details of Aircraft Sighting</legend>
+
+    <div class="row form-group">
+        <div class="col-md-2">Make</div>
+        <div class="col-md-6"><label data-bind="text: Make"></label></div>
+    </div>
+    <div class="row form-group">
+        <div class="col-md-2">Model</div>
+        <div class="col-md-6"><label data-bind="text: Model"></label></div>
+    </div>
+    <div class="row form-group">
+        <div class="col-md-2">Registration</div>
+        <div class="col-md-6"><label data-bind="text: Registration"></label></div>
+    </div>
+    <div class="row form-group">
+        <div class="col-md-2">Location</div>
+        <div class="col-md-6"><label data-bind="text: Location"></label></div>
+    </div>
+    <div class="row form-group">
+        <div class="col-md-2">Date Time</div>
+        <div class="col-md-6"><label data-bind="text: DateAndTime"></label></div>
+    </div>
+
+
+    <div class="btn-group" role="group">
+        <a class="btn btn-default" href="@Url.Action("Index", "ASighting")">Back</a>
+    </div>
+
+
+</fieldset>
+
+
+@section Scripts {
+    <script>
+
+        $(function () {
+            ko.applyBindings(DetailsVM);
+        });
+        var initialData = '@Html.Raw(ViewBag.InitialData)'; //get the raw json
+        var parsedJSON = $.parseJSON(initialData); //parse the json client side
+        var DetailsVM = {
+            
+            AircraftSightings: ko.observableArray([]),
+            Id: ko.observable(parsedJSON.Id),
+            Make: ko.observable(parsedJSON.Make),
+            Model: ko.observable(parsedJSON.Model),
+            Registration: ko.observable(parsedJSON.Registration),
+            Location: ko.observable(parsedJSON.Location),
+            DateAndTime: ko.observable(parsedJSON.DateAndTime)
+        };
+
+        function dateFormat(d) {
+            console.log(d);
+            return ((d.getMonth() + 1) + "").padStart(2, "0")
+                + "/" + (d.getDate() + "").padStart(2, "0")
+                + "/" + d.getFullYear()
+                + " " + d.getHours()
+                + ":" + d.getMinutes()
+                + ":" + d.getSeconds();
+        }
+
+    </script>
+}

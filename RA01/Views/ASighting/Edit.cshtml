@@ -1,0 +1,87 @@
+﻿<fieldset style="margin-top:20px;">
+    <legend style="color:#0026ff;font-weight:bold;">Edit Aircraft Sighting</legend>
+
+    <div class="row form-group">
+        <div class="col-md-2">Make</div>
+        <div class="col-md-6"><input class="form-control" data-bind="value: Make" placeholder="ex: Boeing" /></div>
+    </div>
+    <div class="row form-group">
+        <div class="col-md-2">Model</div>
+        <div class="col-md-6"> <input class="form-control" data-bind="value: Model" placeholder="ex: 777-300ER" /></div>
+    </div>
+    <div class="row form-group">
+        <div class="col-md-2">Registration</div>
+        <div class="col-md-6"> <input class="form-control" data-bind="value: Registration" placeholder="ex: G-RNAC" /></div>
+    </div>
+    <div class="row form-group">
+        <div class="col-md-2">Location</div>
+        <div class="col-md-6"><input class="form-control" data-bind="value: Location" placeholder="ex: London Gatwick" /></div>
+    </div>
+    <div class="row form-group">
+        <div class="col-md-2">Date Time</div>
+        <div class="col-md-6">
+            <input type="datetime-local" class="form-control" data-bind="value: DateAndTime">
+        </div>
+    </div>
+
+    <div class="btn-group" role="group">
+        <button class="btn btn-success" type="button" data-bind="click: SaveASighting">Save</button>
+        <a class="btn btn-default" href="@Url.Action("Index", "ASighting")">Back</a>
+    </div>
+
+</fieldset>
+
+
+@section Scripts {
+    <script>
+
+        $(function () {
+            ko.applyBindings(EditVM);
+        });
+
+        var initialData = '@Html.Raw(ViewBag.InitialData)'; //get the raw json
+        var parsedJSON = $.parseJSON(initialData); //parse the json client side
+        var EditVM = {
+            AircraftSightings: ko.observableArray([]),
+            Id: ko.observable(parsedJSON.Id),
+            Make: ko.observable(parsedJSON.Make),
+            Model: ko.observable(parsedJSON.Model),
+            Registration: ko.observable(parsedJSON.Registration),
+            Location: ko.observable(parsedJSON.Location),
+            DateAndTime: ko.observable(parsedJSON.DateAndTime),
+            SaveASighting: function () {
+                $.ajax({
+                    url: '/ASighting/Edit',
+                    type: 'post',
+                    dataType: 'json',
+                    data: ko.toJSON(this),
+                    contentType: 'application/json',
+                    success: function (result) {
+                    },
+                    error: function (err) {
+                        if (err.responseText == "Creation Failed")
+                        { window.location.href = '/ASighting/Index/'; }
+                        else {
+                            alert("Status:" + err.responseText);
+                            window.location.href = '/ASighting/Index/';;
+                        }
+                    },
+                    complete: function () {
+                        window.location.href = '/ASighting/Index/';
+                    }
+                });
+            }
+        };
+
+        function dateFormat(d) {
+            console.log(d);
+            return ((d.getMonth() + 1) + "").padStart(2, "0")
+                + "/" + (d.getDate() + "").padStart(2, "0")
+                + "/" + d.getFullYear()
+                + " " + d.getHours()
+                + ":" + d.getMinutes()
+                + ":" + d.getSeconds();
+        }
+
+    </script>
+}

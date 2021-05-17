@@ -1,0 +1,71 @@
+﻿@model IEnumerable<RA01.Models.AircraftSighting>
+
+@{ ViewBag.Title = "AircraftSightingIndex"; }
+
+<p>
+    <a class="btn btn-info btn-lg" style="margin-top:70px;margin-bottom:20px;border-radius:50px;" href="@Url.Action("Create", "ASighting")">Create New</a>
+</p>
+
+<div class="row" style="margin:20px;border:1px solid #0094ff;padding:20px;border-radius:5px;">
+
+    <div class="col-md-2">Search By</div>
+    <div class="col-md-3">
+
+        <select class="form-control" style="cursor:pointer;">
+            <option value="Make">Make</option>
+            <option value="Made">Made</option>
+            <option value="Registration">Registration</option>
+        </select>
+
+    </div>
+    <div class="col-md-3">
+        <input class="form-control" type="text" placeholder="Enter here.." style="border-radius:20px;" />
+    </div>
+    <div class="col-md-1">
+        <a class="btn btn-md btn-info" style="border-radius: 50px;">Search</a>
+    </div>
+</div>
+
+<table class="table table-striped table-hover table-bordered">
+    <thead>
+        <tr>
+            <th>
+                Id
+            </th>
+            <th>
+                Make
+            </th>
+            <th>
+                Model
+            </th>
+            <th>
+                Registration
+            </th>
+            <th>
+                Location
+            </th>
+            <th>
+                Date and Time
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody data-bind="foreach: AircraftSightings">
+        <tr>
+            <td data-bind="text: Id"></td>
+            <td data-bind="text: Make"></td>
+            <td data-bind="text: Model"></td>
+            <td data-bind="text: Registration"></td>
+            <td data-bind="text: Location"></td>
+            <td data-bind="text: dateFormat(new Date(parseInt((DateAndTime).match(/\d+/)[0])))"></td>
+            <td>
+                <a class="btn btn-sm btn-warning" style="border-radius: 50px;" data-bind="click: editASighting">Edit</a>
+                <a class="btn btn-sm btn-info" style="border-radius: 50px;" data-bind="click: detailsASighting">Details</a>
+                <a class="btn btn-sm btn-danger" style="border-radius: 50px;" data-bind="click: deleteASighting">Delete</a>
+            </td>
+        </tr>
+    </tbody>
+</table>
+@section Scripts {
+    @Scripts.Render("~/Scripts/ViewModels/ASListVM.js")
+}
